@@ -5,11 +5,11 @@ import "./Teach.css";
 const pillars = [
   {
     title: "Song-first learning",
-    text: "Start with music you already love — the covers and tracks that made you pick up a guitar.",
+    text: "Start with music you already love: the covers and tracks that made you pick up a guitar.",
   },
   {
     title: "Real technique",
-    text: "Chords, strumming, fingerstyle, timing, and transitions — taught clearly so your hands catch up with your ear.",
+    text: "Chords, strumming, fingerstyle, timing, and transitions, taught clearly so your hands catch up with your ear.",
   },
   {
     title: "Your sound",
@@ -32,7 +32,7 @@ export function Teach() {
           <p className="section__eyebrow">How I teach</p>
           <h2 className="section__title">Designed around feel.</h2>
           <p className="section__lede">
-            Online or in person — structured enough to grow, loose enough to
+            Online or in person. Structured enough to grow, loose enough to
             stay musical.
           </p>
         </motion.div>

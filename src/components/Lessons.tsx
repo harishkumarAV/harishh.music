@@ -19,14 +19,14 @@ const packages = [
     meta: "Tailored to your goals",
     badge: "Flexible",
     dark: false,
-    desc: "A personalised plan around the songs and skills you want — paced and shaped for you.",
+    desc: "A personalised plan around the songs and skills you want, paced and shaped for you.",
   },
 ];
 
 const steps = [
   {
     title: "Book a demo",
-    text: "Start with a demo class — no commitment yet.",
+    text: "Start with a demo class. No commitment yet.",
   },
   {
     title: "See how it feels",
@@ -53,8 +53,8 @@ export function Lessons() {
           <p className="section__eyebrow">Packages</p>
           <h2 className="section__title">Two ways to learn.</h2>
           <p className="section__lede">
-            Pick the path that fits you. Book a demo first — then enroll when
-            you’re ready.
+            Pick the path that fits you. Book a demo first, then enroll when
+            you're ready.
           </p>
         </motion.div>
 

@@ -37,7 +37,7 @@ export function Hero() {
           initial="hidden"
           animate="show"
         >
-          Personal coaching from a cover artist with millions of views —
+          Personal coaching from a cover artist with millions of views:
           technique, feel, and the music that already moves you.
         </motion.p>
 

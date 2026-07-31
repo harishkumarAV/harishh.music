@@ -33,8 +33,8 @@ export function Enroll() {
 
     const subject = encodeURIComponent(
       form.interest === "demo"
-        ? `Demo class request — ${form.name}`
-        : `Package enquiry — ${form.name}`
+        ? `Demo class request - ${form.name}`
+        : `Package enquiry - ${form.name}`
     );
     const body = encodeURIComponent(
       [
@@ -104,8 +104,8 @@ export function Enroll() {
               onChange={(e) => setForm({ ...form, interest: e.target.value })}
             >
               <option value="demo">Demo class</option>
-              <option value="beginner">8-Day Beginner Package — ₹999</option>
-              <option value="custom">Customised Training — ₹1,499</option>
+              <option value="beginner">8-Day Beginner Package - ₹999</option>
+              <option value="custom">Customised Training - ₹1,499</option>
             </select>
           </label>
 
@@ -126,7 +126,7 @@ export function Enroll() {
 
           {sent && (
             <p className="enroll__note" role="status">
-              Opening your email app — if nothing opens, message @harishh.music
+              Opening your email app. If nothing opens, message @harishh.music
               on Instagram.
             </p>
           )}

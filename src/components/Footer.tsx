@@ -6,7 +6,7 @@ export function Footer() {
       <div className="footer__inner">
         <p className="footer__brand">harishh.music</p>
         <p className="footer__tag">
-          Guitar lessons & song covers — taught with feel.
+          Guitar lessons & song covers, taught with feel.
         </p>
         <div className="footer__links">
           <a
