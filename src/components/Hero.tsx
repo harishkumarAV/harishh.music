@@ -7,64 +7,66 @@ export function Hero() {
 
   return (
     <section className="hero" id="top" aria-label="Introduction">
+      <div className="hero__grid" aria-hidden="true" />
       <div className="hero__glow" aria-hidden="true" />
-      <div className="hero__glow hero__glow--two" aria-hidden="true" />
 
-      <div className="hero__inner">
-        <motion.p
-          className="hero__brand"
-          variants={fadeUp(reduce)}
-          initial="hidden"
-          animate="show"
-        >
-          harishh.music
-        </motion.p>
-
-        <motion.h1
-          className="hero__title"
-          variants={fadeUp(reduce, 0.12)}
-          initial="hidden"
-          animate="show"
-        >
-          Guitar lessons.
-          <br />
-          Built around the songs you love.
-        </motion.h1>
-
-        <motion.p
-          className="hero__lede"
-          variants={fadeUp(reduce, 0.22)}
-          initial="hidden"
-          animate="show"
-        >
-          Personal coaching from a cover artist with millions of views:
-          technique, feel, and the music that already moves you.
-        </motion.p>
-
-        <motion.div
-          className="hero__actions"
-          variants={fadeUp(reduce, 0.34)}
-          initial="hidden"
-          animate="show"
-        >
-          <motion.a
-            className="btn btn--primary"
-            href="#demo"
-            whileHover={reduce ? undefined : { scale: 1.04 }}
-            whileTap={reduce ? undefined : { scale: 0.98 }}
-            transition={{ duration: 0.25, ease: appleEase }}
+      <div className="hero__layout">
+        <div className="hero__copy">
+          <motion.p
+            className="hero__brand"
+            variants={fadeUp(reduce)}
+            initial="hidden"
+            animate="show"
           >
-            Book a demo class
-          </motion.a>
-          <a
-            className="btn btn--secondary"
-            href="https://www.instagram.com/harishh.music/"
-            target="_blank"
-            rel="noopener noreferrer"
+            harishh.music
+          </motion.p>
+
+          <motion.h1
+            className="hero__title"
+            variants={fadeUp(reduce, 0.1)}
+            initial="hidden"
+            animate="show"
           >
-            Watch on Instagram →
-          </a>
-        </motion.div>
+            Guitar lessons.
+            <br />
+            Built around the songs you love.
+          </motion.h1>
+
+          <motion.p
+            className="hero__lede"
+            variants={fadeUp(reduce, 0.18)}
+            initial="hidden"
+            animate="show"
+          >
+            Personal coaching from a cover artist with millions of views:
+            technique, feel, and the music that already moves you.
+          </motion.p>
+
+          <motion.div
+            className="hero__actions"
+            variants={fadeUp(reduce, 0.28)}
+            initial="hidden"
+            animate="show"
+          >
+            <motion.a
+              className="btn btn--primary"
+              href="#demo"
+              whileHover={reduce ? undefined : { scale: 1.04 }}
+              whileTap={reduce ? undefined : { scale: 0.98 }}
+              transition={{ duration: 0.25, ease: appleEase }}
+            >
+              Book a demo class
+            </motion.a>
+            <a
+              className="btn btn--secondary"
+              href="https://www.instagram.com/harishh.music/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Watch on Instagram →
+            </a>
+          </motion.div>
+        </div>
       </div>
     </section>
   );

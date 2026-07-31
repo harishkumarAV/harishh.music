@@ -3,6 +3,7 @@ import { motion, useReducedMotion } from "framer-motion";
 import "./Nav.css";
 
 const links = [
+  { href: "#experience", label: "Experience" },
   { href: "#about", label: "About" },
   { href: "#teach", label: "Teaching" },
   { href: "#packages", label: "Packages" },
@@ -29,10 +30,6 @@ export function Nav() {
     >
       <div className="nav__inner">
         <a className="nav__brand" href="#top" aria-label="harishh.music home">
-          <span className="nav__brand-mark" aria-hidden="true">
-            <span className="nav__brand-ring" />
-            <span className="nav__brand-core" />
-          </span>
           <span className="nav__brand-text">
             harishh<span className="nav__brand-suffix">.music</span>
           </span>
