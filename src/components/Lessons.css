@@ -74,8 +74,20 @@
   color: #9aa3ad;
 }
 
+.pricing__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+
 .pricing__cta {
   align-self: flex-start;
+}
+
+.card--dark .btn--outline {
+  border-color: rgba(110, 193, 255, 0.45);
+  color: var(--blue-hot);
 }
 
 .demo-path {

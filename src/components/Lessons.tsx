@@ -16,10 +16,11 @@ const packages = [
     id: "beginner",
     name: "8-Day Beginner Package",
     price: "₹999",
-    meta: "8 days · over 1 month",
+    meta: "8 classes · 4 weeks · weekends",
     badge: "Absolute beginners",
     dark: true,
     desc: "For absolute beginners. Covers most of what a new player needs to know, and sets a clear path for what comes next.",
+    syllabus: true,
   },
   {
     id: "custom",
@@ -29,6 +30,7 @@ const packages = [
     badge: "Flexible",
     dark: false,
     desc: "A personalised plan around the songs and skills you want. Eight classes over one month, paced and shaped for you.",
+    syllabus: false,
   },
 ];
 
@@ -112,12 +114,23 @@ function TiltCard({
         <span className="pricing__meta">{pkg.meta}</span>
       </p>
       <p className="pricing__desc">{pkg.desc}</p>
-      <a
-        className={`btn ${pkg.dark ? "btn--primary" : "btn--outline"} pricing__cta`}
-        href="#demo"
-      >
-        Enquire by mail
-      </a>
+      <div className="pricing__actions">
+        {pkg.syllabus && (
+          <a
+            className="btn btn--outline pricing__cta"
+            href="/beginner-guitar-syllabus.pdf"
+            download="harishh-beginner-guitar-syllabus.pdf"
+          >
+            Download syllabus
+          </a>
+        )}
+        <a
+          className={`btn ${pkg.dark ? "btn--primary" : "btn--outline"} pricing__cta`}
+          href="#demo"
+        >
+          Enquire by mail
+        </a>
+      </div>
     </motion.li>
   );
 }
