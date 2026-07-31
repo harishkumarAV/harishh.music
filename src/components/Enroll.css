@@ -1,0 +1,64 @@
+.enroll {
+  padding-bottom: 96px;
+  padding-top: 40px;
+}
+
+.enroll__form {
+  max-width: 560px;
+  margin: 0 auto;
+  display: grid;
+  gap: 20px;
+  padding: 40px 32px;
+}
+
+.enroll__form:hover {
+  transform: none;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+}
+
+.field {
+  display: grid;
+  gap: 8px;
+}
+
+.field span {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--apple-black);
+}
+
+.field input,
+.field select,
+.field textarea {
+  width: 100%;
+  padding: 14px 16px;
+  border: 1px solid #d2d2d7;
+  background: var(--apple-bg);
+  color: var(--apple-black);
+  border-radius: 12px;
+  outline: none;
+  transition: border-color 0.2s var(--ease), box-shadow 0.2s var(--ease);
+}
+
+.field input:focus,
+.field select:focus,
+.field textarea:focus {
+  border-color: var(--apple-blue);
+  box-shadow: 0 0 0 3px rgba(0, 113, 227, 0.2);
+  background: var(--apple-white);
+}
+
+.field textarea {
+  resize: vertical;
+  min-height: 96px;
+}
+
+.enroll__submit {
+  justify-self: start;
+  margin-top: 4px;
+}
+
+.enroll__note {
+  font-size: 14px;
+  color: var(--apple-gray);
+}
