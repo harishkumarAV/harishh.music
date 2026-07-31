@@ -2,6 +2,7 @@ import { lazy, Suspense } from "react";
 import { Nav } from "./components/Nav";
 import { Hero } from "./components/Hero";
 import { Ambient } from "./components/Ambient";
+import { Marquee } from "./components/Marquee";
 import { About } from "./components/About";
 import { Teach } from "./components/Teach";
 import { Lessons } from "./components/Lessons";
@@ -26,7 +27,9 @@ export default function App() {
         >
           <GuitarShowcase />
         </Suspense>
+        <Marquee />
         <About />
+        <Marquee />
         <Teach />
         <Lessons />
         <Enroll />

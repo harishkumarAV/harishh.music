@@ -27,9 +27,9 @@ export function Hero() {
             initial="hidden"
             animate="show"
           >
-            Guitar lessons.
+            Learn guitar.
             <br />
-            Built around the songs you love.
+            Play what moves you.
           </motion.h1>
 
           <motion.p
@@ -38,8 +38,8 @@ export function Hero() {
             initial="hidden"
             animate="show"
           >
-            Personal coaching from a cover artist with millions of views:
-            technique, feel, and the music that already moves you.
+            Private lessons built around real songs, clear technique, and steady
+            progress.
           </motion.p>
 
           <motion.div

@@ -8,7 +8,9 @@ export const appleTween: Transition = {
 };
 
 export const fadeUp = (reduce: boolean | null, delay = 0): Variants => ({
-  hidden: reduce ? { opacity: 1, y: 0, filter: "blur(0px)" } : { opacity: 0, y: 36, filter: "blur(8px)" },
+  hidden: reduce
+    ? { opacity: 1, y: 0, filter: "blur(0px)" }
+    : { opacity: 0, y: 36, filter: "blur(8px)" },
   show: {
     opacity: 1,
     y: 0,
@@ -29,7 +31,25 @@ export const fadeScale = (reduce: boolean | null, delay = 0): Variants => ({
   },
 });
 
-export const stagger = (reduce: boolean | null, staggerChildren = 0.1): Variants => ({
+export const slideIn = (
+  reduce: boolean | null,
+  from: "left" | "right" = "left",
+  delay = 0
+): Variants => ({
+  hidden: reduce
+    ? { opacity: 1, x: 0 }
+    : { opacity: 0, x: from === "left" ? -48 : 48 },
+  show: {
+    opacity: 1,
+    x: 0,
+    transition: { ...appleTween, delay },
+  },
+});
+
+export const stagger = (
+  reduce: boolean | null,
+  staggerChildren = 0.1
+): Variants => ({
   hidden: {},
   show: {
     transition: {

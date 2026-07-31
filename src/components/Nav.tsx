@@ -30,9 +30,14 @@ export function Nav() {
     >
       <div className="nav__inner">
         <a className="nav__brand" href="#top" aria-label="harishh.music home">
-          <span className="nav__brand-text">
-            harishh<span className="nav__brand-suffix">.music</span>
+          <span className="nav__eq" aria-hidden="true">
+            <i />
+            <i />
+            <i />
+            <i />
+            <i />
           </span>
+          <span className="nav__brand-text">harishh.music</span>
         </a>
         <nav className="nav__links" aria-label="Primary">
           {links.map((link) => (

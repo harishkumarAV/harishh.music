@@ -1,22 +1,44 @@
+.about {
+  position: relative;
+  overflow: hidden;
+  min-height: 70svh;
+  display: flex;
+  align-items: center;
+}
+
+.about__year {
+  position: absolute;
+  left: 50%;
+  top: 46%;
+  translate: -50% -50%;
+  font-size: clamp(140px, 28vw, 320px);
+  font-weight: 700;
+  letter-spacing: -0.08em;
+  line-height: 0.8;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(61, 169, 255, 0.28);
+  pointer-events: none;
+  user-select: none;
+  z-index: 0;
+}
+
+.about__inner {
+  position: relative;
+  z-index: 1;
+}
+
 .about__intro {
   max-width: 600px;
   margin: 0 auto;
   padding: 28px 24px;
   border-radius: var(--radius);
   border: 1px solid var(--line);
-  background: rgba(255, 255, 255, 0.03);
-  backdrop-filter: blur(16px);
+  background: rgba(5, 8, 13, 0.55);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
 }
 
 .about__lede {
-  margin-bottom: 12px;
-}
-
-.about__note {
-  font-size: clamp(13px, 1.7vw, 15px);
-  line-height: 1.35;
-  color: var(--muted);
-  text-align: center;
-  max-width: 480px;
-  margin: 0 auto;
+  margin-bottom: 0;
 }

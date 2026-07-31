@@ -1,5 +1,10 @@
-import { useState, type FormEvent } from "react";
-import { motion, useReducedMotion } from "framer-motion";
+import { useState, type FormEvent, type MouseEvent } from "react";
+import {
+  motion,
+  useMotionTemplate,
+  useMotionValue,
+  useReducedMotion,
+} from "framer-motion";
 import { fadeScale, fadeUp } from "../lib/motion";
 import "./Enroll.css";
 
@@ -21,6 +26,16 @@ export function Enroll() {
   const reduce = useReducedMotion();
   const [form, setForm] = useState<FormState>(initial);
   const [sent, setSent] = useState(false);
+  const mx = useMotionValue(50);
+  const my = useMotionValue(40);
+  const spotlight = useMotionTemplate`radial-gradient(520px circle at ${mx}% ${my}%, rgba(61, 169, 255, 0.16), transparent 42%)`;
+
+  function onMove(e: MouseEvent<HTMLFormElement>) {
+    if (reduce) return;
+    const rect = e.currentTarget.getBoundingClientRect();
+    mx.set(((e.clientX - rect.left) / rect.width) * 100);
+    my.set(((e.clientY - rect.top) / rect.height) * 100);
+  }
 
   function onSubmit(e: FormEvent) {
     e.preventDefault();
@@ -28,7 +43,7 @@ export function Enroll() {
       form.interest === "beginner"
         ? "8-Day Beginner Package (₹999)"
         : form.interest === "custom"
-          ? "Customised Training (₹1,499)"
+          ? "Customised Training - 8 classes / 1 month (₹1,499)"
           : "Demo class";
 
     const subject = encodeURIComponent(
@@ -44,12 +59,13 @@ export function Enroll() {
         `Message: ${form.message || "(none)"}`,
       ].join("\n")
     );
-    window.location.href = `mailto:hello@harishh.music?subject=${subject}&body=${body}`;
+    window.location.href = `mailto:avhk2003@gmail.com?subject=${subject}&body=${body}`;
     setSent(true);
   }
 
   return (
     <section className="enroll section" id="demo">
+      <div className="enroll__aura" aria-hidden="true" />
       <div className="section__inner">
         <motion.div
           variants={fadeUp(reduce)}
@@ -58,16 +74,18 @@ export function Enroll() {
           viewport={{ once: true, amount: 0.3 }}
         >
           <p className="section__eyebrow">Get started</p>
-          <h2 className="section__title">Book a demo. Or enquire.</h2>
+          <h2 className="section__title">Ready when you are.</h2>
           <p className="section__lede">
-            Attend a demo class first, see how it fits, then enroll in a package
-            by mailing me. I’ll reply with availability.
+            Reach out for a demo or package enquiry. I'll get back with
+            availability.
           </p>
         </motion.div>
 
         <motion.form
           className="card enroll__form"
           onSubmit={onSubmit}
+          onMouseMove={onMove}
+          style={{ backgroundImage: reduce ? undefined : spotlight }}
           variants={fadeScale(reduce, 0.08)}
           initial="hidden"
           whileInView="show"
@@ -97,7 +115,7 @@ export function Enroll() {
           </label>
 
           <label className="field">
-            <span>I’m interested in</span>
+            <span>I'm interested in</span>
             <select
               name="interest"
               value={form.interest}
@@ -105,7 +123,7 @@ export function Enroll() {
             >
               <option value="demo">Demo class</option>
               <option value="beginner">8-Day Beginner Package - ₹999</option>
-              <option value="custom">Customised Training - ₹1,499</option>
+              <option value="custom">Customised Training - 8 classes / 1 month - ₹1,499</option>
             </select>
           </label>
 
@@ -114,7 +132,7 @@ export function Enroll() {
             <textarea
               name="message"
               rows={3}
-              placeholder="Anything you’d like me to know…"
+              placeholder="Anything you'd like me to know…"
               value={form.message}
               onChange={(e) => setForm({ ...form, message: e.target.value })}
             />

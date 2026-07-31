@@ -15,16 +15,16 @@ import "./GuitarShowcase.css";
 
 const beats = [
   {
-    title: "Feel every note",
-    text: "Scroll to spin the guitar. Lessons that start with songs you already love.",
+    title: "Feel every phrase",
+    text: "Scroll to explore the instrument. Lessons shaped around music that already lives in you.",
   },
   {
-    title: "Built for beginners",
-    text: "An 8-day path over one month covers what new players need, then maps what comes next.",
+    title: "Eight days. Real progress.",
+    text: "A focused beginner path over one month, covering what you need and where to go next.",
   },
   {
-    title: "Then make it yours",
-    text: "Customised training when you want a plan shaped around your goals and sound.",
+    title: "Your plan. Your pace.",
+    text: "Customised training when you want coaching shaped around your goals and sound.",
   },
 ];
 

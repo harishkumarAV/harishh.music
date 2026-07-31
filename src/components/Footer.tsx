@@ -6,7 +6,7 @@ export function Footer() {
       <div className="footer__inner">
         <p className="footer__brand">harishh.music</p>
         <p className="footer__tag">
-          Guitar lessons & song covers, taught with feel.
+          Learn guitar. Keep the music personal.
         </p>
         <div className="footer__links">
           <a
@@ -17,7 +17,7 @@ export function Footer() {
             Instagram
           </a>
           <a href="#demo">Book a demo</a>
-          <a href="mailto:hello@harishh.music">Email</a>
+          <a href="mailto:avhk2003@gmail.com">Mail</a>
         </div>
         <p className="footer__copy">
           Copyright © {new Date().getFullYear()} harishh.music. All rights
