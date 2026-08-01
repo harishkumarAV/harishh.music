@@ -15,8 +15,8 @@
 
 .teach__progress-bar {
   height: 100%;
-  background: linear-gradient(90deg, #1a8cff, #6ec1ff, #8b7cff);
-  box-shadow: 0 0 16px rgba(61, 169, 255, 0.55);
+  background: linear-gradient(90deg, #e8e8e8, #f0f0f0, #b0b0b0);
+  box-shadow: 0 0 16px rgba(255, 255, 255, 0.55);
 }
 
 .teach__layout {
@@ -35,8 +35,9 @@
 }
 
 .teach__lede {
-  font-size: clamp(14px, 1.8vw, 16px);
-  line-height: 1.35;
+  font-size: 17px;
+  line-height: 1.47059;
+  letter-spacing: -0.022em;
   color: var(--muted);
   max-width: 420px;
   margin: 0 auto;
@@ -62,8 +63,8 @@
 }
 
 .teach__panel--alt {
-  background: linear-gradient(160deg, #121a24 0%, #0a1018 100%);
-  border-color: rgba(61, 169, 255, 0.22);
+  background: linear-gradient(160deg, #1a1a1a 0%, #0a0a0a 100%);
+  border-color: rgba(255, 255, 255, 0.16);
 }
 
 .teach__panel-glow {
@@ -72,7 +73,7 @@
   width: 70%;
   height: 70%;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(61, 169, 255, 0.35), transparent 70%);
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.18), transparent 70%);
   pointer-events: none;
 }
 
@@ -82,23 +83,24 @@
   font-size: 12px;
   font-weight: 600;
   color: var(--blue);
-  margin-bottom: 10px;
-  letter-spacing: 0.1em;
+  margin-bottom: 8px;
+  letter-spacing: -0.01em;
 }
 
 .teach__panel h3 {
   position: relative;
-  font-size: clamp(24px, 3.5vw, 34px);
+  font-size: clamp(21px, 2.8vw, 28px);
   font-weight: 600;
-  letter-spacing: -0.025em;
-  line-height: 1.08;
-  margin-bottom: 10px;
+  letter-spacing: -0.015em;
+  line-height: 1.14286;
+  margin-bottom: 8px;
 }
 
 .teach__panel p {
   position: relative;
-  font-size: 15px;
-  line-height: 1.35;
+  font-size: 17px;
+  line-height: 1.47059;
+  letter-spacing: -0.022em;
   color: var(--muted);
   max-width: 40ch;
 }

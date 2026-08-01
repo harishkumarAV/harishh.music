@@ -1,4 +1,4 @@
-import { Suspense, useRef } from "react";
+import { Suspense, useEffect, useRef } from "react";
 import { Canvas } from "@react-three/fiber";
 import { ContactShadows, Float } from "@react-three/drei";
 import {
@@ -15,8 +15,8 @@ import "./GuitarShowcase.css";
 
 const beats = [
   {
-    title: "Feel every phrase",
-    text: "Scroll to explore the instrument. Lessons shaped around music that already lives in you.",
+    title: "Play what you love",
+    text: "Scroll through the instrument. Lessons start from songs that already mean something to you.",
   },
   {
     title: "Eight days. Real progress.",
@@ -42,18 +42,26 @@ function ShowcaseScene({
 
   return (
     <>
-      <color attach="background" args={["#03070c"]} />
       <ambientLight intensity={0.55} />
-      <directionalLight position={[4, 6, 3]} intensity={1.5} color="#fff5ea" />
-      <directionalLight position={[-3, 2, -1]} intensity={0.5} color="#4db8ff" />
-      <pointLight position={[2, 2, 3]} intensity={24} color="#4db8ff" distance={14} />
+      <directionalLight position={[3, 5, 4]} intensity={1.25} color="#ffffff" />
+      <directionalLight position={[-3.5, 2, 2.5]} intensity={0.55} color="#f0f0f0" />
       <spotLight
-        position={[-3, 4, 2]}
-        intensity={14}
-        color="#7c5cff"
-        angle={0.5}
-        penumbra={0.65}
+        position={[0.8, 3.5, 4.5]}
+        intensity={18}
+        color="#ffffff"
+        angle={0.75}
+        penumbra={1}
+        distance={18}
       />
+      <spotLight
+        position={[-2, 2.5, 3.5]}
+        intensity={10}
+        color="#f5f5f5"
+        angle={0.8}
+        penumbra={1}
+        distance={16}
+      />
+
       <Float
         speed={reduce ? 0 : 1.1}
         rotationIntensity={reduce ? 0 : 0.12}
@@ -66,10 +74,11 @@ function ShowcaseScene({
       </Float>
       <ContactShadows
         position={[0, -2.05, 0]}
-        opacity={0.5}
+        opacity={0.28}
         scale={14}
-        blur={2.6}
+        blur={3.4}
         far={5}
+        color="#000000"
       />
     </>
   );
@@ -123,6 +132,7 @@ function ShowcaseBeat({
 export function GuitarShowcase() {
   const reduce = useReducedMotion();
   const ref = useRef<HTMLElement>(null);
+  const stickyRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["start start", "end end"],
@@ -133,9 +143,28 @@ export function GuitarShowcase() {
     restDelta: 0.001,
   });
 
+  useEffect(() => {
+    const sticky = stickyRef.current;
+    if (!sticky || reduce) return;
+
+    const onMove = (e: PointerEvent) => {
+      const rect = sticky.getBoundingClientRect();
+      sticky.style.setProperty("--mx", `${e.clientX - rect.left}px`);
+      sticky.style.setProperty("--my", `${e.clientY - rect.top}px`);
+    };
+
+    window.addEventListener("pointermove", onMove, { passive: true });
+    return () => window.removeEventListener("pointermove", onMove);
+  }, [reduce]);
+
   return (
     <section className="showcase" id="experience" ref={ref}>
-      <div className="showcase__sticky">
+      <div className="showcase__sticky" ref={stickyRef}>
+        <div className="showcase__glow showcase__glow--mid" aria-hidden="true" />
+        {!reduce && (
+          <div className="showcase__glow showcase__glow--cursor" aria-hidden="true" />
+        )}
+
         <div className="showcase__canvas" aria-hidden={!reduce}>
           <Suspense fallback={<div className="showcase__fallback" />}>
             <Canvas
@@ -143,9 +172,12 @@ export function GuitarShowcase() {
               camera={{ position: [1.2, 0.2, 5.4], fov: 36 }}
               gl={{
                 antialias: true,
-                alpha: false,
+                alpha: true,
                 powerPreference: "high-performance",
                 failIfMajorPerformanceCaveat: false,
+              }}
+              onCreated={({ gl }) => {
+                gl.setClearColor(0x000000, 0);
               }}
             >
               <ShowcaseScene scrollProgress={smooth} reduce={!!reduce} />

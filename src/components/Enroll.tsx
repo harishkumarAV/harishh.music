@@ -27,7 +27,7 @@ export function Enroll() {
   const [form, setForm] = useState<FormState>(initial);
   const mx = useMotionValue(50);
   const my = useMotionValue(40);
-  const spotlight = useMotionTemplate`radial-gradient(520px circle at ${mx}% ${my}%, rgba(61, 169, 255, 0.16), transparent 42%)`;
+  const spotlight = useMotionTemplate`radial-gradient(520px circle at ${mx}% ${my}%, rgba(255, 255, 255, 0.12), transparent 42%)`;
 
   function onMove(e: MouseEvent<HTMLFormElement>) {
     if (reduce) return;

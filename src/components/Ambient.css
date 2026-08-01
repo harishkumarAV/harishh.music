@@ -10,9 +10,9 @@
   position: absolute;
   inset: 0;
   background-image:
-    radial-gradient(circle at 15% 75%, transparent 0 34%, rgba(61, 169, 255, 0.035) 35%, transparent 37%),
-    radial-gradient(circle at 88% 25%, transparent 0 26%, rgba(110, 193, 255, 0.03) 27%, transparent 29%),
-    url("/music-pattern.svg");
+    radial-gradient(circle at 15% 75%, transparent 0 34%, rgba(255, 255, 255, 0.035) 35%, transparent 37%),
+    radial-gradient(circle at 88% 25%, transparent 0 26%, rgba(255, 255, 255, 0.03) 27%, transparent 29%),
+    url("/music-pattern.svg?v=bw2");
   background-size:
     520px 520px,
     380px 380px,
@@ -23,7 +23,7 @@
     0 0;
   background-repeat: no-repeat, no-repeat, repeat;
   mask-image: radial-gradient(ellipse at center, black 20%, transparent 72%);
-  opacity: 0.42;
+  opacity: 0.55;
 }
 
 .ambient__orb {

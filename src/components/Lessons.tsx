@@ -68,7 +68,7 @@ function TiltCard({
     stiffness: 180,
     damping: 18,
   });
-  const glare = useMotionTemplate`radial-gradient(420px circle at ${mx}% ${my}%, rgba(110, 193, 255, 0.22), transparent 45%)`;
+  const glare = useMotionTemplate`radial-gradient(420px circle at ${mx}% ${my}%, rgba(255, 255, 255, 0.16), transparent 45%)`;
 
   function onMove(e: MouseEvent) {
     if (reduce || !ref.current) return;
