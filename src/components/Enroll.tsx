@@ -25,7 +25,6 @@ const initial: FormState = {
 export function Enroll() {
   const reduce = useReducedMotion();
   const [form, setForm] = useState<FormState>(initial);
-  const [sent, setSent] = useState(false);
   const mx = useMotionValue(50);
   const my = useMotionValue(40);
   const spotlight = useMotionTemplate`radial-gradient(520px circle at ${mx}% ${my}%, rgba(61, 169, 255, 0.16), transparent 42%)`;
@@ -59,8 +58,7 @@ export function Enroll() {
         `Message: ${form.message || "(none)"}`,
       ].join("\n")
     );
-    window.location.href = `mailto:avhk2003@gmail.com?subject=${subject}&body=${body}`;
-    setSent(true);
+    window.location.href = `mailto:harishh.music@gmail.com?subject=${subject}&body=${body}`;
   }
 
   return (
@@ -123,7 +121,9 @@ export function Enroll() {
             >
               <option value="demo">Demo class</option>
               <option value="beginner">8-Day Beginner Package - ₹999</option>
-              <option value="custom">Customised Training - 8 classes / 1 month - ₹1,499</option>
+              <option value="custom">
+                Customised Training - 8 classes / 1 month - ₹1,499
+              </option>
             </select>
           </label>
 
@@ -141,13 +141,6 @@ export function Enroll() {
           <button className="btn btn--primary enroll__submit" type="submit">
             {form.interest === "demo" ? "Book demo via email" : "Send enquiry"}
           </button>
-
-          {sent && (
-            <p className="enroll__note" role="status">
-              Opening your email app. If nothing opens, message @harishh.music
-              on Instagram.
-            </p>
-          )}
         </motion.form>
       </div>
     </section>

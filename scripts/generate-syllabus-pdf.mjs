@@ -142,7 +142,7 @@ doc.moveDown(1.2);
 doc
   .fillColor("#86868b")
   .fontSize(9)
-  .text("Contact: avhk2003@gmail.com  |  Instagram: @harishh.music");
+  .text("Contact: harishh.music@gmail.com  |  Instagram: @harishh.music");
 
 doc.end();
 

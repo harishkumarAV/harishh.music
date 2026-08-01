@@ -17,7 +17,7 @@ export function Footer() {
             Instagram
           </a>
           <a href="#demo">Book a demo</a>
-          <a href="mailto:avhk2003@gmail.com">Mail</a>
+          <a href="mailto:harishh.music@gmail.com">Mail</a>
         </div>
         <p className="footer__copy">
           Copyright © {new Date().getFullYear()} harishh.music. All rights

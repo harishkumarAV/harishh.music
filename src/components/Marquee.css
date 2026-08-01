@@ -3,7 +3,7 @@
   z-index: 1;
   overflow: hidden;
   border-block: 1px solid var(--line);
-  background: rgba(0, 0, 0, 0.25);
+  background: var(--marquee-bg);
   padding: 18px 0;
   mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
 }
@@ -33,7 +33,7 @@
   font-weight: 600;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: rgba(242, 245, 248, 0.45);
+  color: var(--marquee-text);
   white-space: nowrap;
 }
 
@@ -42,7 +42,7 @@
   height: 5px;
   border-radius: 50%;
   background: var(--blue);
-  box-shadow: 0 0 12px rgba(61, 169, 255, 0.7);
+  box-shadow: 0 0 12px color-mix(in srgb, var(--blue) 70%, transparent);
   flex-shrink: 0;
 }
 
