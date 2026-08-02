@@ -1,4 +1,4 @@
-import { useState, type FormEvent, type MouseEvent } from "react";
+import { useEffect, useState, type FormEvent, type MouseEvent } from "react";
 import {
   motion,
   useMotionTemplate,
@@ -15,7 +15,7 @@ type FormState = {
   message: string;
 };
 
-type SubmitState = "idle" | "sending" | "sent" | "error";
+type SubmitState = "idle" | "sending" | "error";
 
 const CONTACT_EMAIL = "harishh.music@gmail.com";
 
@@ -34,14 +34,27 @@ function interestLabel(value: string) {
   return "Demo class";
 }
 
+function isInAppBrowser() {
+  if (typeof navigator === "undefined") return false;
+  const ua = navigator.userAgent || "";
+  return /Instagram|FBAN|FBAV|FB_IAB|Line\/|LinkedInApp|Twitter|Snapchat|TikTok|Bytedance|MicroMessenger/i.test(
+    ua
+  );
+}
+
 export function Enroll() {
   const reduce = useReducedMotion();
   const [form, setForm] = useState<FormState>(initial);
   const [submitState, setSubmitState] = useState<SubmitState>("idle");
   const [copied, setCopied] = useState(false);
+  const [inApp, setInApp] = useState(false);
   const mx = useMotionValue(50);
   const my = useMotionValue(40);
   const spotlight = useMotionTemplate`radial-gradient(520px circle at ${mx}% ${my}%, rgba(255, 255, 255, 0.12), transparent 42%)`;
+
+  useEffect(() => {
+    setInApp(isInAppBrowser());
+  }, []);
 
   function onMove(e: MouseEvent<HTMLFormElement>) {
     if (reduce) return;
@@ -60,17 +73,15 @@ export function Enroll() {
     }
   }
 
-  async function onSubmit(e: FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    setSubmitState("sending");
-
-    const interest = interestLabel(form.interest);
+  function onSubmit(e: FormEvent<HTMLFormElement>) {
     const isLocal =
       window.location.hostname === "localhost" ||
       window.location.hostname === "127.0.0.1";
 
-    // Netlify Forms only works on the deployed site — use mailto locally
+    // Local: Netlify Forms unavailable — open mail app
     if (isLocal) {
+      e.preventDefault();
+      const interest = interestLabel(form.interest);
       const subject = encodeURIComponent(
         form.interest === "demo"
           ? `Demo class request - ${form.name}`
@@ -85,37 +96,11 @@ export function Enroll() {
         ].join("\n")
       );
       window.location.href = `mailto:${CONTACT_EMAIL}?subject=${subject}&body=${body}`;
-      setSubmitState("idle");
       return;
     }
 
-    const payload = new URLSearchParams({
-      "form-name": "enquiry",
-      "bot-field": "",
-      name: form.name,
-      email: form.email,
-      interest,
-      message: form.message || "(none)",
-    });
-
-    try {
-      // Post to static HTML so Netlify Forms middleware handles it (SPA-safe)
-      const res = await fetch("/__forms.html", {
-        method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: payload.toString(),
-      });
-
-      // Netlify may return 200 or redirect (2xx / 3xx)
-      if (res.status >= 400) {
-        throw new Error(`Form submit failed (${res.status})`);
-      }
-
-      setSubmitState("sent");
-      setForm(initial);
-    } catch {
-      setSubmitState("error");
-    }
+    // Production: native HTML POST (works in Instagram; fetch often does not)
+    setSubmitState("sending");
   }
 
   return (
@@ -140,6 +125,7 @@ export function Enroll() {
           className="card enroll__form"
           name="enquiry"
           method="POST"
+          action="/thanks.html"
           data-netlify="true"
           data-netlify-honeypot="bot-field"
           onSubmit={onSubmit}
@@ -156,6 +142,9 @@ export function Enroll() {
               Don’t fill this out: <input name="bot-field" tabIndex={-1} />
             </label>
           </p>
+
+          {/* Hidden mirrors so interest label (not raw value) is submitted */}
+          <input type="hidden" name="interest" value={interestLabel(form.interest)} />
 
           <label className="field">
             <span>Name</span>
@@ -183,7 +172,6 @@ export function Enroll() {
           <label className="field">
             <span>I'm interested in</span>
             <select
-              name="interest"
               value={form.interest}
               onChange={(e) => setForm({ ...form, interest: e.target.value })}
             >
@@ -206,9 +194,9 @@ export function Enroll() {
             />
           </label>
 
-          {submitState === "sent" && (
-            <p className="enroll__status enroll__status--ok" role="status">
-              Sent. I’ll get back to you soon.
+          {inApp && (
+            <p className="enroll__tip">
+              Tip: after sending, you’ll see a short confirmation page.
             </p>
           )}
 
