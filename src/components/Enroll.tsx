@@ -1,4 +1,4 @@
-import { useState, type FormEvent, type MouseEvent } from "react";
+import { useEffect, useState, type FormEvent, type MouseEvent } from "react";
 import {
   motion,
   useMotionTemplate,
@@ -15,6 +15,8 @@ type FormState = {
   message: string;
 };
 
+const CONTACT_EMAIL = "harishh.music@gmail.com";
+
 const initial: FormState = {
   name: "",
   email: "",
@@ -22,12 +24,27 @@ const initial: FormState = {
   message: "",
 };
 
+function isInAppBrowser() {
+  if (typeof navigator === "undefined") return false;
+  const ua = navigator.userAgent || "";
+  return /Instagram|FBAN|FBAV|FB_IAB|Line\/|LinkedInApp|Twitter|X\/|Snapchat|TikTok|Bytedance|MicroMessenger/i.test(
+    ua
+  );
+}
+
 export function Enroll() {
   const reduce = useReducedMotion();
   const [form, setForm] = useState<FormState>(initial);
+  const [inApp, setInApp] = useState(false);
+  const [status, setStatus] = useState<string | null>(null);
+  const [copied, setCopied] = useState(false);
   const mx = useMotionValue(50);
   const my = useMotionValue(40);
   const spotlight = useMotionTemplate`radial-gradient(520px circle at ${mx}% ${my}%, rgba(255, 255, 255, 0.12), transparent 42%)`;
+
+  useEffect(() => {
+    setInApp(isInAppBrowser());
+  }, []);
 
   function onMove(e: MouseEvent<HTMLFormElement>) {
     if (reduce) return;
@@ -36,29 +53,61 @@ export function Enroll() {
     my.set(((e.clientY - rect.top) / rect.height) * 100);
   }
 
-  function onSubmit(e: FormEvent) {
-    e.preventDefault();
+  function buildMail(formData: FormState) {
     const interestLabel =
-      form.interest === "beginner"
+      formData.interest === "beginner"
         ? "8-Day Beginner Package (₹999)"
-        : form.interest === "custom"
+        : formData.interest === "custom"
           ? "Customised Training - 8 classes / 1 month (₹1,499)"
           : "Demo class";
 
-    const subject = encodeURIComponent(
-      form.interest === "demo"
-        ? `Demo class request - ${form.name}`
-        : `Package enquiry - ${form.name}`
-    );
-    const body = encodeURIComponent(
-      [
-        `Name: ${form.name}`,
-        `Email: ${form.email}`,
-        `Interest: ${interestLabel}`,
-        `Message: ${form.message || "(none)"}`,
-      ].join("\n")
-    );
-    window.location.href = `mailto:harishh.music@gmail.com?subject=${subject}&body=${body}`;
+    const subjectRaw =
+      formData.interest === "demo"
+        ? `Demo class request - ${formData.name}`
+        : `Package enquiry - ${formData.name}`;
+
+    const bodyRaw = [
+      `Name: ${formData.name}`,
+      `Email: ${formData.email}`,
+      `Interest: ${interestLabel}`,
+      `Message: ${formData.message || "(none)"}`,
+    ].join("\n");
+
+    const subject = encodeURIComponent(subjectRaw);
+    const body = encodeURIComponent(bodyRaw);
+
+    return {
+      subjectRaw,
+      bodyRaw,
+      mailto: `mailto:${CONTACT_EMAIL}?subject=${subject}&body=${body}`,
+      gmail: `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(CONTACT_EMAIL)}&su=${subject}&body=${body}`,
+    };
+  }
+
+  async function copyEmail() {
+    try {
+      await navigator.clipboard.writeText(CONTACT_EMAIL);
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 2000);
+    } catch {
+      setStatus(`Email me at ${CONTACT_EMAIL}`);
+    }
+  }
+
+  function onSubmit(e: FormEvent) {
+    e.preventDefault();
+    const mail = buildMail(form);
+
+    // Instagram / in-app browsers block mailto — open Gmail compose instead
+    if (inApp || isInAppBrowser()) {
+      setStatus(
+        "Opening Gmail… If it doesn’t open, copy the email below or open this site in Chrome / Safari."
+      );
+      window.location.assign(mail.gmail);
+      return;
+    }
+
+    window.location.href = mail.mailto;
   }
 
   return (
@@ -137,6 +186,21 @@ export function Enroll() {
               onChange={(e) => setForm({ ...form, message: e.target.value })}
             />
           </label>
+
+          {inApp && (
+            <p className="enroll__tip">
+              Opened from Instagram? Tap submit to continue in Gmail, or copy{" "}
+              <button
+                type="button"
+                className="enroll__email-btn"
+                onClick={copyEmail}
+              >
+                {copied ? "Copied!" : CONTACT_EMAIL}
+              </button>
+            </p>
+          )}
+
+          {status && <p className="enroll__status">{status}</p>}
 
           <button className="btn btn--primary enroll__submit" type="submit">
             {form.interest === "demo" ? "Book demo via email" : "Send enquiry"}
