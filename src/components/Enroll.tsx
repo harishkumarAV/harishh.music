@@ -60,7 +60,7 @@ export function Enroll() {
     }
   }
 
-  async function onSubmit(e: FormEvent) {
+  async function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setSubmitState("sending");
 
@@ -89,8 +89,9 @@ export function Enroll() {
       return;
     }
 
-    const body = new URLSearchParams({
+    const payload = new URLSearchParams({
       "form-name": "enquiry",
+      "bot-field": "",
       name: form.name,
       email: form.email,
       interest,
@@ -98,13 +99,17 @@ export function Enroll() {
     });
 
     try {
-      const res = await fetch("/", {
+      // Post to static HTML so Netlify Forms middleware handles it (SPA-safe)
+      const res = await fetch("/__forms.html", {
         method: "POST",
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: body.toString(),
+        body: payload.toString(),
       });
 
-      if (!res.ok) throw new Error(`Form submit failed (${res.status})`);
+      // Netlify may return 200 or redirect (2xx / 3xx)
+      if (res.status >= 400) {
+        throw new Error(`Form submit failed (${res.status})`);
+      }
 
       setSubmitState("sent");
       setForm(initial);
