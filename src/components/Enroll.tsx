@@ -34,6 +34,18 @@ function interestLabel(value: string) {
   return "Demo class";
 }
 
+/** Netlify returns a thank-you page when Forms actually handled the POST. */
+function wasHandledByNetlifyForms(status: number, body: string) {
+  if (status < 200 || status >= 400) return false;
+  // SPA index / static detection page = Forms did NOT process this request
+  if (body.includes('id="root"')) return false;
+  if (body.includes("Form detection")) return false;
+  // Real Netlify thank-you / empty accepted response
+  if (/thank you for your submission/i.test(body)) return true;
+  if (body.trim().length < 500 && !body.includes("<form")) return true;
+  return /thank you/i.test(body);
+}
+
 export function Enroll() {
   const reduce = useReducedMotion();
   const [form, setForm] = useState<FormState>(initial);
@@ -88,24 +100,27 @@ export function Enroll() {
       return;
     }
 
-    const payload = new URLSearchParams({
-      "form-name": "enquiry",
-      "bot-field": "",
-      name: form.name,
-      email: form.email,
-      interest,
-      message: form.message || "(none)",
+    const formData = new FormData(e.currentTarget);
+    formData.set("form-name", "enquiry");
+    formData.set("bot-field", "");
+    formData.set("interest", interest);
+    formData.set("message", form.message || "(none)");
+
+    const encoded = new URLSearchParams();
+    formData.forEach((value, key) => {
+      if (typeof value === "string") encoded.append(key, value);
     });
 
     try {
-      const res = await fetch("/__forms.html", {
+      const res = await fetch("/", {
         method: "POST",
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: payload.toString(),
+        body: encoded.toString(),
       });
+      const text = await res.text();
 
-      if (res.status >= 400) {
-        throw new Error(`Form submit failed (${res.status})`);
+      if (!wasHandledByNetlifyForms(res.status, text)) {
+        throw new Error("Netlify Forms did not accept this submission");
       }
 
       setSubmitState("sent");

@@ -12,6 +12,22 @@
   </head>
   <body>
     <div id="root"></div>
+    <!-- Netlify Forms: must exist in built HTML for detection -->
+    <form
+      name="enquiry"
+      method="POST"
+      data-netlify="true"
+      data-netlify-honeypot="bot-field"
+      netlify
+      hidden
+    >
+      <input type="hidden" name="form-name" value="enquiry" />
+      <input name="bot-field" />
+      <input name="name" type="text" />
+      <input name="email" type="email" />
+      <input name="interest" type="text" />
+      <textarea name="message"></textarea>
+    </form>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
