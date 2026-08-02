@@ -1,4 +1,4 @@
-import { useEffect, useState, type FormEvent, type MouseEvent } from "react";
+import { useState, type FormEvent, type MouseEvent } from "react";
 import {
   motion,
   useMotionTemplate,
@@ -15,6 +15,8 @@ type FormState = {
   message: string;
 };
 
+type SubmitState = "idle" | "sending" | "sent" | "error";
+
 const CONTACT_EMAIL = "harishh.music@gmail.com";
 
 const initial: FormState = {
@@ -24,27 +26,22 @@ const initial: FormState = {
   message: "",
 };
 
-function isInAppBrowser() {
-  if (typeof navigator === "undefined") return false;
-  const ua = navigator.userAgent || "";
-  return /Instagram|FBAN|FBAV|FB_IAB|Line\/|LinkedInApp|Twitter|X\/|Snapchat|TikTok|Bytedance|MicroMessenger/i.test(
-    ua
-  );
+function interestLabel(value: string) {
+  if (value === "beginner") return "8-Day Beginner Package (₹999)";
+  if (value === "custom") {
+    return "Customised Training - 8 classes / 1 month (₹1,499)";
+  }
+  return "Demo class";
 }
 
 export function Enroll() {
   const reduce = useReducedMotion();
   const [form, setForm] = useState<FormState>(initial);
-  const [inApp, setInApp] = useState(false);
-  const [status, setStatus] = useState<string | null>(null);
+  const [submitState, setSubmitState] = useState<SubmitState>("idle");
   const [copied, setCopied] = useState(false);
   const mx = useMotionValue(50);
   const my = useMotionValue(40);
   const spotlight = useMotionTemplate`radial-gradient(520px circle at ${mx}% ${my}%, rgba(255, 255, 255, 0.12), transparent 42%)`;
-
-  useEffect(() => {
-    setInApp(isInAppBrowser());
-  }, []);
 
   function onMove(e: MouseEvent<HTMLFormElement>) {
     if (reduce) return;
@@ -53,61 +50,67 @@ export function Enroll() {
     my.set(((e.clientY - rect.top) / rect.height) * 100);
   }
 
-  function buildMail(formData: FormState) {
-    const interestLabel =
-      formData.interest === "beginner"
-        ? "8-Day Beginner Package (₹999)"
-        : formData.interest === "custom"
-          ? "Customised Training - 8 classes / 1 month (₹1,499)"
-          : "Demo class";
-
-    const subjectRaw =
-      formData.interest === "demo"
-        ? `Demo class request - ${formData.name}`
-        : `Package enquiry - ${formData.name}`;
-
-    const bodyRaw = [
-      `Name: ${formData.name}`,
-      `Email: ${formData.email}`,
-      `Interest: ${interestLabel}`,
-      `Message: ${formData.message || "(none)"}`,
-    ].join("\n");
-
-    const subject = encodeURIComponent(subjectRaw);
-    const body = encodeURIComponent(bodyRaw);
-
-    return {
-      subjectRaw,
-      bodyRaw,
-      mailto: `mailto:${CONTACT_EMAIL}?subject=${subject}&body=${body}`,
-      gmail: `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(CONTACT_EMAIL)}&su=${subject}&body=${body}`,
-    };
-  }
-
   async function copyEmail() {
     try {
       await navigator.clipboard.writeText(CONTACT_EMAIL);
       setCopied(true);
       window.setTimeout(() => setCopied(false), 2000);
     } catch {
-      setStatus(`Email me at ${CONTACT_EMAIL}`);
+      /* ignore */
     }
   }
 
-  function onSubmit(e: FormEvent) {
+  async function onSubmit(e: FormEvent) {
     e.preventDefault();
-    const mail = buildMail(form);
+    setSubmitState("sending");
 
-    // Instagram / in-app browsers block mailto — open Gmail compose instead
-    if (inApp || isInAppBrowser()) {
-      setStatus(
-        "Opening Gmail… If it doesn’t open, copy the email below or open this site in Chrome / Safari."
+    const interest = interestLabel(form.interest);
+    const isLocal =
+      window.location.hostname === "localhost" ||
+      window.location.hostname === "127.0.0.1";
+
+    // Netlify Forms only works on the deployed site — use mailto locally
+    if (isLocal) {
+      const subject = encodeURIComponent(
+        form.interest === "demo"
+          ? `Demo class request - ${form.name}`
+          : `Package enquiry - ${form.name}`
       );
-      window.location.assign(mail.gmail);
+      const body = encodeURIComponent(
+        [
+          `Name: ${form.name}`,
+          `Email: ${form.email}`,
+          `Interest: ${interest}`,
+          `Message: ${form.message || "(none)"}`,
+        ].join("\n")
+      );
+      window.location.href = `mailto:${CONTACT_EMAIL}?subject=${subject}&body=${body}`;
+      setSubmitState("idle");
       return;
     }
 
-    window.location.href = mail.mailto;
+    const body = new URLSearchParams({
+      "form-name": "enquiry",
+      name: form.name,
+      email: form.email,
+      interest,
+      message: form.message || "(none)",
+    });
+
+    try {
+      const res = await fetch("/", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: body.toString(),
+      });
+
+      if (!res.ok) throw new Error(`Form submit failed (${res.status})`);
+
+      setSubmitState("sent");
+      setForm(initial);
+    } catch {
+      setSubmitState("error");
+    }
   }
 
   return (
@@ -130,6 +133,10 @@ export function Enroll() {
 
         <motion.form
           className="card enroll__form"
+          name="enquiry"
+          method="POST"
+          data-netlify="true"
+          data-netlify-honeypot="bot-field"
           onSubmit={onSubmit}
           onMouseMove={onMove}
           style={{ backgroundImage: reduce ? undefined : spotlight }}
@@ -138,6 +145,13 @@ export function Enroll() {
           whileInView="show"
           viewport={{ once: true, amount: 0.2 }}
         >
+          <input type="hidden" name="form-name" value="enquiry" />
+          <p className="enroll__honeypot" aria-hidden="true">
+            <label>
+              Don’t fill this out: <input name="bot-field" tabIndex={-1} />
+            </label>
+          </p>
+
           <label className="field">
             <span>Name</span>
             <input
@@ -187,9 +201,15 @@ export function Enroll() {
             />
           </label>
 
-          {inApp && (
-            <p className="enroll__tip">
-              Opened from Instagram? Tap submit to continue in Gmail, or copy{" "}
+          {submitState === "sent" && (
+            <p className="enroll__status enroll__status--ok" role="status">
+              Sent. I’ll get back to you soon.
+            </p>
+          )}
+
+          {submitState === "error" && (
+            <p className="enroll__status enroll__status--err" role="alert">
+              Couldn’t send from here. Email{" "}
               <button
                 type="button"
                 className="enroll__email-btn"
@@ -200,10 +220,16 @@ export function Enroll() {
             </p>
           )}
 
-          {status && <p className="enroll__status">{status}</p>}
-
-          <button className="btn btn--primary enroll__submit" type="submit">
-            {form.interest === "demo" ? "Book demo via email" : "Send enquiry"}
+          <button
+            className="btn btn--primary enroll__submit"
+            type="submit"
+            disabled={submitState === "sending"}
+          >
+            {submitState === "sending"
+              ? "Sending…"
+              : form.interest === "demo"
+                ? "Book a demo"
+                : "Send enquiry"}
           </button>
         </motion.form>
       </div>
